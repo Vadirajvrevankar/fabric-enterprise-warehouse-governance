@@ -1,12 +1,13 @@
 -- 02_Data_Warehouse
--- Step 13: Create Sales Details View
+-- Step 13: Create / Update Sales Details View
 -- Target: EnterpriseWarehouse
 
-CREATE VIEW warehouse.vw_SalesDetails
+CREATE OR ALTER VIEW warehouse.vw_SalesDetails
 AS
 SELECT
     o.OrderID,
     c.CustomerName,
+    c.Region,
     p.ProductName,
     p.Category,
     o.OrderDate,
