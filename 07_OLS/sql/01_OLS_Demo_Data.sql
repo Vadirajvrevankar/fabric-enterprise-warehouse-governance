@@ -70,3 +70,28 @@ SELECT
     type_desc
 FROM sys.database_principals
 WHERE name = 'OLSAnalyst';
+
+
+
+-- STEP 3: Grant Object-Level Access
+
+
+-- Grant SELECT access to Sales table
+
+GRANT SELECT
+ON warehouse.OLSSalesDemo
+TO OLSAnalyst;
+
+
+-- Verify Object Permission
+
+SELECT
+    dp.name AS RoleName,
+    p.permission_name,
+    p.state_desc,
+    OBJECT_SCHEMA_NAME(p.major_id) AS SchemaName,
+    OBJECT_NAME(p.major_id) AS ObjectName
+FROM sys.database_permissions p
+JOIN sys.database_principals dp
+    ON p.grantee_principal_id = dp.principal_id
+WHERE dp.name = 'OLSAnalyst';
