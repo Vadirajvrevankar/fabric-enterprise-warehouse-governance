@@ -40,3 +40,26 @@ SELECT
     type_desc
 FROM sys.database_principals
 WHERE name = 'CLSAnalyst';
+
+
+-- Step 3: Grant SELECT on non-sensitive columns
+
+GRANT SELECT
+(
+    EmployeeID,
+    EmployeeName,
+    Department
+)
+ON warehouse.CLSEmployeeDemo
+TO CLSAnalyst;
+
+-- Step 3: Verify permissions
+
+SELECT
+    dp.name AS RoleName,
+    p.permission_name,
+    p.state_desc
+FROM sys.database_permissions p
+JOIN sys.database_principals dp
+    ON p.grantee_principal_id = dp.principal_id
+WHERE dp.name = 'CLSAnalyst';
