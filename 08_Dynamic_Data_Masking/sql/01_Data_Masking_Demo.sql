@@ -30,3 +30,23 @@ VALUES
 --verify
 SELECT *
 FROM warehouse.MaskingCustomerDemo;
+
+
+
+
+-- Step 2: Configure Dynamic Data Masking
+
+
+ALTER TABLE warehouse.MaskingCustomerDemo
+ALTER COLUMN PhoneNumber
+ADD MASKED WITH (FUNCTION = 'default()');
+
+
+-- Verify Masking Configuration
+
+SELECT
+    c.name AS ColumnName,
+    c.is_masked,
+    c.masking_function
+FROM sys.masked_columns AS c
+WHERE c.object_id = OBJECT_ID('warehouse.MaskingCustomerDemo');
