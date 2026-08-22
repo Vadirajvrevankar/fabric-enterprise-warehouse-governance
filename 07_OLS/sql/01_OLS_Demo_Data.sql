@@ -95,3 +95,46 @@ FROM sys.database_permissions p
 JOIN sys.database_principals dp
     ON p.grantee_principal_id = dp.principal_id
 WHERE dp.name = 'OLSAnalyst';
+
+-- STEP 4: Verify OLS Object Permissions
+
+
+SELECT
+    dp.name AS RoleName,
+    p.permission_name,
+    p.state_desc,
+    OBJECT_SCHEMA_NAME(p.major_id) AS SchemaName,
+    OBJECT_NAME(p.major_id) AS ObjectName
+FROM sys.database_permissions p
+JOIN sys.database_principals dp
+    ON p.grantee_principal_id = dp.principal_id
+WHERE dp.name = 'OLSAnalyst'
+ORDER BY ObjectName;
+
+
+
+-- STEP 5: OLS Access Test
+
+
+-- Test Sales Object
+-- OLSAnalyst has SELECT permission on this object.
+
+SELECT *
+FROM warehouse.OLSSalesDemo;
+
+
+-- Test Payroll Object
+-- OLSAnalyst has NOT been granted SELECT permission
+-- on this object.
+
+SELECT *
+FROM warehouse.OLSPayrollDemo;
+
+
+-- NOTE:
+-- The current Synapse account may still be able to access
+-- OLSPayrollDemo because the current account can have
+-- additional permissions.
+--
+-- The OLS configuration is verified separately through
+-- sys.database_permissions.
