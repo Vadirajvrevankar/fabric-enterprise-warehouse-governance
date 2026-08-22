@@ -98,3 +98,39 @@ FROM warehouse.CLSEmployeeDemo;
 SELECT
     Salary
 FROM warehouse.CLSEmployeeDemo;
+
+
+
+
+-- STEP 5: Verify Final CLS Configuration
+
+
+SELECT
+    dp.name AS RoleName,
+    p.permission_name,
+    p.state_desc,
+    CASE
+        WHEN p.minor_id = 0 THEN 'TABLE'
+        ELSE c.name
+    END AS PermissionLevel
+FROM sys.database_permissions p
+JOIN sys.database_principals dp
+    ON p.grantee_principal_id = dp.principal_id
+LEFT JOIN sys.columns c
+    ON p.major_id = c.object_id
+   AND p.minor_id = c.column_id
+WHERE dp.name = 'CLSAnalyst'
+  AND p.major_id = OBJECT_ID('warehouse.CLSEmployeeDemo');
+
+-- Expected:
+--
+-- EmployeeID      → SELECT / GRANT
+-- EmployeeName    → SELECT / GRANT
+-- Department      → SELECT / GRANT
+-- Salary          → No SELECT GRANT
+--
+-- NOTE:
+-- Salary is still accessible from the current session because
+-- the current account has additional permissions.
+-- CREATE USER is not supported in this environment, so a
+-- separate restricted-user test could not be performed.
