@@ -27,3 +27,16 @@ VALUES
 -- Verify demo data
 SELECT *
 FROM warehouse.CLSEmployeeDemo;
+
+
+-- CLS Step 2: Create Security Role
+
+CREATE ROLE CLSAnalyst;
+
+-- Verify Role
+
+SELECT
+    name,
+    type_desc
+FROM sys.database_principals
+WHERE name = 'CLSAnalyst';
