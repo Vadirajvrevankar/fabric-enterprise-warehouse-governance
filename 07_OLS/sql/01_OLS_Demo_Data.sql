@@ -58,3 +58,15 @@ FROM warehouse.OLSSalesDemo;
 
 SELECT *
 FROM warehouse.OLSPayrollDemo;
+
+-- Step 2: Create OLS Security Role
+
+CREATE ROLE OLSAnalyst;
+
+-- Verify Role
+
+SELECT
+    name,
+    type_desc
+FROM sys.database_principals
+WHERE name = 'OLSAnalyst';
